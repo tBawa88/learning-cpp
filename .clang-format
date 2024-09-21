@@ -1,0 +1,9 @@
+BasedOnStyle: Google
+BreakBeforeBraces: Attach
+ColumnLimit: 0
+AlignTrailingComments: false
+IndentWidth: 4
+TabWidth: 4
+# AllowShortBlocksOnASingleLine: Preserve # Preserve short blocks on a single line
+# AllowShortCaseLabelsOnASingleLine: true # Preserve short case labels on a single line
+AllowShortFunctionsOnASingleLine: Preserve
