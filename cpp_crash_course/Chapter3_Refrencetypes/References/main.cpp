@@ -48,6 +48,8 @@ int main() {
     // This time the newValue remains the same, but original and duplicate gets updated to thridvalue
     //  this is due to the fact that once a value is stored in a Reference type, it keep pointing to it
     printf("Original value = %d\n", original);
-    printf("New value = %d\n", newValue);
     printf("Original ref = %d\n", duplicate);
+    printf("New value = %d\n", newValue);
+    printf("Third value = %d\n", thirdvalue);
+
 }
