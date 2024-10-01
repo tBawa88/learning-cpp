@@ -5,7 +5,7 @@
 void printFrequency(const std::unordered_map<char, int>& m) {
     std::cout << "Character\tFrequency" << std::endl;
     for (auto pr : m) {
-        std::cout << pr.first << "\t" << pr.second << std::endl;
+        std::cout << pr.first << "\t\t" << pr.second << std::endl;
     }
 }
 
@@ -20,6 +20,16 @@ int main() {
     }
 
     printFrequency(um);
+    std::cout << "accessing invalid key " << um['~'] << std::endl;
 
+    printFrequency(um);
+    // same as normal maps, accessing an invalid key adds it to the map
+    try {
+        um.at('!');  // throws an exception
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+
+    um.at('x');
     return 0;
 }
