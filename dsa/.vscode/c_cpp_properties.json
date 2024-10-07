@@ -3,7 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "\"/usr/include/StanfordCPPLib\""
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

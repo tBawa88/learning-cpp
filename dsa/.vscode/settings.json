@@ -53,6 +53,11 @@
         "forward_list": "cpp",
         "list": "cpp",
         "map": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "fstream": "cpp",
+        "filesystem": "cpp",
+        "codecvt": "cpp",
+        "csignal": "cpp",
+        "ratio": "cpp"
     }
 }
