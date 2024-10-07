@@ -53,6 +53,9 @@
         "forward_list": "cpp",
         "list": "cpp",
         "map": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "hash_set": "cpp",
+        "unordered_set": "cpp",
+        "fstream": "cpp"
     }
 }
