@@ -21,7 +21,7 @@ bool isPallindrome(std::string& s) {
 }
 
 bool pallindromeHelper(std::string& S, int first, int last) {
-    if (first - last <= 0) return true;
+    if (first >= last) return true;  // First == Last ;means string is 1 character | First > Last means the string is empty
 
-    return (S[first] == S[last]) && pallindromeHelper(S, first + 1, last - 1);
+    return (S[first] == S[last] && pallindromeHelper(S, first + 1, last - 1));
 }

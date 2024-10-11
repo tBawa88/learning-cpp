@@ -58,6 +58,7 @@
         "filesystem": "cpp",
         "codecvt": "cpp",
         "csignal": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "unordered_set": "cpp"
     }
 }
