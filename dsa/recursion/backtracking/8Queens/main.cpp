@@ -1,63 +1,23 @@
 #include <iostream>
+#include <set>
 #include <string>
+#include <unordered_map>
 #include <vector>
-/**
- * Place 8 queens on a chess board such that no Queen is in line of sight of another Queen
- */
-struct Board {
-    Board(size_t size) : rows{size}, cols{size} {
-        // allocate memory to an array of int pointers (rows)
-        space = new int*[rows];
 
-        // allocate memory to pointer in each element (cols)
-        for (int i = 0; i < rows; i++) {
-            space[i] = new int[cols];
-        }
-    }
-    ~Board() {
-        delete[] space;
-    }
-    // for the sake of overloading the outstream operator and be able to do this std::cout << board << std::endl;
-    friend std::ostream& operator<<(std::ostream& os, Board& board);
-    /**
-     * Checks if it's safe to place a queen on given row, col
-     */
-    bool isSafe(int row, int col) {
-    }
+#include "Board.h"
 
-    /**
-     * Place a Queen on a given row,col
-     */
-    void place(int row, int col) {
-    }
-
-    /**
-     * Remove a Queen from a given row, col
-     */
-    void remove(int row, int cold) {
-    }
-
-   private:
-    size_t rows;
-    size_t cols;
-    int** space;
-};
-std::ostream& operator<<(std::ostream& os, Board& board) {
-    os << "The board is set";
-    return os;
-}
 void solveQueens(Board& board);
-
-// this helper will actuall perform all the recrusive tasks
 bool queensHelper(Board& board, int column);
+
 int main() {
     Board board{8};
     solveQueens(board);
-
+    // board.place(0, 5);
+    // std::cout << board.printBoard() << std::endl;
     return 0;
 }
 void solveQueens(Board& board) {
-    queensHelper(board, 0);  // we start at column 1, with Queen 1
+    queensHelper(board, 0);  // we start at first column with Queen #1
 }
 
 /**
@@ -69,8 +29,9 @@ void solveQueens(Board& board) {
  * The "column" parameter represents a single queen , and it will tell us how many more columns we need to "set"
  */
 bool queensHelper(Board& board, int column) {
-    if (column == 7) {  // since it's zero indexed: 8th column has 7index
-        std::cout << board << std::endl;
+    std::cout << board.printBoard() << std::endl;
+    if (column == 8) {  // if it's the last column
+        std::cout << board.printBoard() << std::endl;
         return true;
     }
 
@@ -79,6 +40,7 @@ bool queensHelper(Board& board, int column) {
     for (int row = 0; row < 8; row++) {
         // we only go down this path if the current combinatoin of row/column is safe
         if (board.isSafe(row, column)) {
+            std::cout << "safe to place " << row << " " << column << std::endl;
             // choose
             board.place(row, column);
             //  explore
