@@ -13,8 +13,6 @@ int main() {
     std::cout << list << std::endl;
     list.remove(1);
     std::cout << list << std::endl;
-    list.pop();
-    std::cout << list << std::endl;
 
     return 0;
 }

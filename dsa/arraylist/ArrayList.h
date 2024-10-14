@@ -22,14 +22,11 @@ class ArrayList {
     void remove(int index);
     bool contains(const T& value);
     bool isEmpty();
+
     T& operator[](int index);  // for read-write access
     const T& operator[](int index) const;  // for read only acces
     // it's important to make sure that along with the const return type, the function is also of const type
-    // since only difference in return type is not sufficient for overloading
-
-    // to declare a friend function it also needs to be templated?
-    template <typename U>
-    friend std::ostream& operator<<(std::ostream& out, const ArrayList<U>& list);
+    // because just the difference in return type is not sufficient for overloading
 };
 
 // Initializes a list with given size. Default value of size if 5
@@ -166,6 +163,8 @@ bool ArrayList<T>::contains(const T& value) {
 template <typename T>
 bool ArrayList<T>::isEmpty() { return len == 0; }
 
+// overloading of subscript operators
+// this overload returns an element from the underlying array and provides read-write access to that element
 template <typename T>
 T& ArrayList<T>::operator[](int index) {
     if (index < 0 || index >= len) {
@@ -174,6 +173,7 @@ T& ArrayList<T>::operator[](int index) {
     return arr[index];
 }
 
+// this overload returns the element but only for read access
 template <typename T>
 const T& ArrayList<T>::operator[](int index) const {
     if (index < 0 || index >= len) {
@@ -182,15 +182,14 @@ const T& ArrayList<T>::operator[](int index) const {
     return arr[index];
 }
 
-template <typename U>
-std::ostream& operator<<(std::ostream& out, const ArrayList<U>& list) {
+template <typename T>
+std::ostream& operator<<(std::ostream& out, ArrayList<T>& list) {
     out << "[";
-    for (int i = 0; i < list.len; i++) {
-        out << list.arr[i];
-        if (i < list.len - 1)
+    for (int i = 0; i < list.size(); i++) {
+        out << list[i];
+        if (i < list.size() - 1)
             out << ",";
     }
     out << "]";
-
     return out;
 }
