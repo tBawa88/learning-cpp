@@ -91,9 +91,8 @@ T PrioQueue<T>::dequeue() {
         return val;
     }
 
-    Node<T>* temp = heap[0];
-    // swap first and last
-    swap(0, heap.size() - 1);
+    Node<T>* temp = heap[0];  // get reference to the first element
+    heap[0] = heap[heap.size() - 1];  // update first element with last element
     heap.pop_back();  // remove the last element
 
     // perform the sink down operation
