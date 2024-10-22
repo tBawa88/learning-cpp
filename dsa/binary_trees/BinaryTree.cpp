@@ -1,12 +1,14 @@
 #include "BinaryTree.h"
 
 #include <iostream>
+#include <string>
 
 #include "TreeNode.h"
 
 using namespace std;
 void clearTree(TreeNode *root);
 void printTree(TreeNode *root);
+void printSidewaysHelper(TreeNode *root, std::string indent);
 void containsHelper(TreeNode *root, int &value, bool &flag);
 bool contains2(TreeNode *root, int &value);
 
@@ -22,6 +24,11 @@ BinaryTree::~BinaryTree() {
 
 void BinaryTree::print() {
     printTree(root);
+}
+
+void BinaryTree::printSideways() {
+    std::string indent = "";
+    printSidewaysHelper(this->root, indent);
 }
 
 bool BinaryTree::contains(int value) {
@@ -59,6 +66,13 @@ void printTree(TreeNode *root) {
         cout << root->data << endl;
         printTree(root->leftchild);
         printTree(root->rightchild);
+    }
+}
+void printSidewaysHelper(TreeNode *root, std::string indent) {
+    if (root) {
+        printSidewaysHelper(root->rightchild, indent + "   ");
+        std::cout << indent << root->data << std::endl;
+        printSidewaysHelper(root->leftchild, indent + "   ");
     }
 }
 

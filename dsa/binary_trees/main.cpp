@@ -17,7 +17,12 @@ int main() {
     root->rightchild->rightchild = new TreeNode(70);
 
     BinaryTree tree{root};
+    cout << "==== print ====\n";
     tree.print();
+
+    cout << "==== printSideways ====\n";
+    tree.printSideways();
+
     int find{10};
     cout << "finding " << find << endl;
 
