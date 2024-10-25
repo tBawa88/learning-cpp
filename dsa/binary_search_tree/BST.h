@@ -6,7 +6,7 @@
 class BS_Tree {
     Treenode* root;
     size_t treesize;
-    bool insertHelper(Treenode* root, const int& val);
+    void insertHelper(Treenode*& root, const int& val);
     bool search(Treenode* root, const int& val);
     void inorderPrint(Treenode* root);
     void preorderPrint(Treenode* root);

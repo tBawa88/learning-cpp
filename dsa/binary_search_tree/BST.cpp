@@ -35,29 +35,17 @@ void BS_Tree::printPost() { postorderPrint(root); }
 void BS_Tree::printPre() { preorderPrint(root); }
 
 //=========== all helper functions ===========
-bool BS_Tree::insertHelper(Treenode* root, const int& val) {
-    if (root) {
-        if (val == root->data)
-            return false;
-        else if (val < root->data) {
-            if (root->left == nullptr) {
-                Treenode* newnode = new Treenode(val);
-                root->left = newnode;
-                treesize++;
-                return true;
-            } else
-                return insertHelper(root->left, val);
-        } else if (val > root->data) {
-            if (root->right == nullptr) {
-                Treenode* newnode = new Treenode(val);
-                root->right = newnode;
-                treesize++;
-                return true;
-            } else
-                return insertHelper(root->right, val);
-        }
+void BS_Tree::insertHelper(Treenode*& root, const int& val) {
+    // passing reference to a pointer which allows us to update the nullptr directly (not derefrence it, but update it's value)
+    if (!root) {
+        root = new Treenode{val};
+        treesize++;
+    } else if (root->data > val) {
+        insertHelper(root->left, val);
+    } else if (root->data < val) {
+        insertHelper(root->right, val);
     }
-    return false;
+    // ignore the case where root->data == val
 }
 
 bool BS_Tree::search(Treenode* root, const int& val) {
@@ -69,7 +57,6 @@ bool BS_Tree::search(Treenode* root, const int& val) {
         else
             return search(root->right, val);  // search right subtree
     }
-
     // if the current node is nullptr, means this is where the node was supposed to be if it exisited in the BST
     return false;
 }
