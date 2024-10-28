@@ -10,13 +10,16 @@ int main() {
     tree.insert(5)->insert(15)->insert(6)->insert(2)->insert(11)->insert(20)->insert(6);
 
     cout << "==== printing ====\n";
-    tree.printIn();
+    tree.printSideways();
 
     int find{11};
     if (tree.contains(find))
         cout << "FOUND " << find << endl;
     else
         cout << "NOT FOUND " << find << endl;
+
+    cout << "Min value in tree = " << tree.getMin() << endl;
+    cout << "Max value in tree = " << tree.getMax() << endl;
 
     return 0;
 }

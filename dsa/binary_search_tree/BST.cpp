@@ -34,6 +34,22 @@ void BS_Tree::printPost() { postorderPrint(root); }
 // Prints Pre-Order traversal of the BSTree
 void BS_Tree::printPre() { preorderPrint(root); }
 
+// Prints the Entire Tree sideways with proper indentation
+void BS_Tree::printSideways() {
+    printSideways(root, "");
+}
+
+int BS_Tree::getMin() const {
+    if (!root)
+        throw runtime_error{"Tree is empty"};
+    return getMin(root);
+}
+int BS_Tree::getMax() const {
+    if (!root)
+        throw runtime_error{"Tree is empty"};
+    return getMax(root);
+}
+
 //=========== all helper functions ===========
 void BS_Tree::insertHelper(Treenode*& root, const int& val) {
     // passing reference to a pointer which allows us to update the nullptr directly (not derefrence it, but update it's value)
@@ -61,6 +77,28 @@ bool BS_Tree::search(Treenode* root, const int& val) {
     return false;
 }
 
+int BS_Tree::getMax(Treenode* node) const {
+    if (!node->right)
+        return node->data;
+    else
+        return getMax(node->right);
+}
+int BS_Tree::getMin(Treenode* node) const {
+    if (!node->left)
+        return node->data;
+    else
+        return getMin(node->left);
+}
+
+// ==== Print Helpers ======
+
+void BS_Tree::printSideways(Treenode* node, string indent) {
+    if (node) {
+        printSideways(node->right, indent + "   ");
+        cout << indent << node->data << endl;
+        printSideways(node->left, indent + "   ");
+    }
+}
 void BS_Tree::inorderPrint(Treenode* root) {
     if (root) {
         inorderPrint(root->left);
@@ -82,7 +120,6 @@ void BS_Tree::postorderPrint(Treenode* root) {
         cout << root->data << " , ";
     }
 }
-
 void BS_Tree::clear(Treenode* root) {
     if (root) {
         clear(root->left);
