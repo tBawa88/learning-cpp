@@ -21,5 +21,8 @@ int main() {
     cout << "Min value in tree = " << tree.getMin() << endl;
     cout << "Max value in tree = " << tree.getMax() << endl;
 
+    int removeValue = 15;
+    tree.remove(removeValue);
+    tree.printSideways();
     return 0;
 }

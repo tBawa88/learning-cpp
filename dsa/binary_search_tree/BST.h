@@ -10,7 +10,7 @@ class BS_Tree {
     bool search(Treenode* node, const int& val);
     int getMin(Treenode* node) const;
     int getMax(Treenode* node) const;
-
+    void remove(Treenode*& node, const int& val);
     void inorderPrint(Treenode* node);
     void preorderPrint(Treenode* node);
     void postorderPrint(Treenode* node);
