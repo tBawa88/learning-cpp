@@ -3,11 +3,18 @@
 #ifndef P_Node
 #define P_Node
 struct Node {
-    int data;
+    char ch;
     int priority;
+    Node* left;
+    Node* right;
 
-    Node(int data, int priority) : data{data}, priority{priority} {}
-    ~Node() { std::cout << "pqueue node deleted \n"; }
+    Node(char ch, int priority) : ch{ch}, priority{priority} {
+        left = nullptr;
+        right = nullptr;
+    }
+    Node(int priority, Node* left, Node* right)
+        : priority{priority}, left{left}, right{right} {}
+    ~Node() {}
 };
 
 #endif

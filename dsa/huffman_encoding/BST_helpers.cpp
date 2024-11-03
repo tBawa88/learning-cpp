@@ -89,5 +89,6 @@ void BST::clear(Treenode* node) {
         clear(node->left);
         clear(node->right);
         delete node;
+        node = nullptr;
     }
 }

@@ -4,82 +4,101 @@
 #include <stdexcept>
 using namespace std;
 
-/**
- *    // Helper Methods
-    void bubbleUp();
-    void sinkDown();
-    void swap(int a, int b);
-
-   public:
-    void enqueue(int value, int priority);
-    int dequeue();
-    size_t size();
-    bool isEmpty();
-    void print();
- */
-size_t Queue::size() const { return list.size(); }
-bool Queue::isEmpty() const { return list.size() == 0; }
+size_t Queue::size() const { return queueArray.size(); }
+bool Queue::isEmpty() const { return queueArray.size() == 0; }
 Queue::~Queue() {
-    for (Node* trash : list)
-        delete trash;
+    for (Node* trash : queueArray) {
+        if (trash != nullptr) {
+            delete trash;
+            trash = nullptr;
+        }
+    }
 }
-
-void Queue::enqueue(int data, int priority) {
-    list.push_back(new Node(data, priority));
+// Takes a character and it's priority
+// Creates a new Node*
+// adds it to the Priority Queue
+void Queue::enqueue(char ch, int priority) {
+    queueArray.push_back(new Node(ch, priority));
     bubbleUp();
 }
-int Queue::dequeue() {
+
+// Takes in a Node*
+// adds it to the Priority Queue
+void Queue::enqueue(Node* node) {
+    queueArray.push_back(node);
+    bubbleUp();
+}
+
+// Removes and Returns the lowest priority node from the queue
+Node* Queue::dequeue() {
     if (isEmpty())
         throw runtime_error{"Queue is empty"};
 
-    Node* firstNode = list[0];
-    Node* lastNode = list[list.size() - 1];
-    list[0] = lastNode;
-    list.pop_back();
+    Node* firstNode = queueArray[0];
+    Node* lastNode = queueArray[queueArray.size() - 1];
+    queueArray[0] = lastNode;
+    queueArray.pop_back();
     sinkDown();
-    return firstNode->data;
+    return firstNode;
 }
 
+// Helper methods =======
+
+int min(int a, int b) { return a < b ? a : b; }
+
+// Returns Whichever index has the smaller prio
+int Queue::getSmallerPrioIndex(const int& leftIdx, const int& rightIdx) {
+    if (queueArray[leftIdx]->priority < queueArray[rightIdx]->priority)
+        return leftIdx;
+    return rightIdx;
+}
+
+// Brings UP the last element of the underlying array
+// Swaps current node with it's parent IF current node has lower priority value
 void Queue::bubbleUp() {
-    int currIdx = list.size() - 1;
-    int currPrio = list[currIdx]->priority;
+    int currIdx = queueArray.size() - 1;
+    int currPrio = queueArray[currIdx]->priority;
 
     int parentIdx = (currIdx - 1) / 2;
-    while (parentIdx >= 0 && list[parentIdx]->priority > currPrio) {
+    while (parentIdx >= 0 && queueArray[parentIdx]->priority > currPrio) {
         swap(currIdx, parentIdx);
         currIdx = parentIdx;
         parentIdx = (currIdx - 1) / 2;
     }
 }
 
-int min(int a, int b) { return a < b ? a : b; }
+// Sinks DOWN the 0th index node of the underlying array
+// Swaps the current node with whichever child has the lower priority
+//  - Only IF the current has higher priority value than both
 void Queue::sinkDown() {
-    if (list.size() < 2)
+    if (queueArray.size() < 2)
         return;
 
     int currIdx = 0;
-    int currPrio = list[currIdx]->priority;
+    int currPrio = queueArray[currIdx]->priority;
     int leftIdx = currIdx * 2 + 1;
-    int rightIdx = min(leftIdx + 1, list.size() - 1);
+    int rightIdx = min(leftIdx + 1, queueArray.size() - 1);
 
-    while (leftIdx < list.size()) {
-        int smallerChildIdx = list[leftIdx]->priority < list[rightIdx]->priority ? leftIdx : rightIdx;
-        if (currPrio < list[smallerChildIdx]->priority) break;
+    while (leftIdx < queueArray.size()) {
+        int smallerChildIdx = getSmallerPrioIndex(leftIdx, rightIdx);
+        if (currPrio < queueArray[smallerChildIdx]->priority) break;
 
         swap(currIdx, smallerChildIdx);
         currIdx = smallerChildIdx;
         leftIdx = currIdx * 2 + 1;
-        rightIdx = min(leftIdx + 1, list.size() - 1);
+        rightIdx = min(leftIdx + 1, queueArray.size() - 1);
     }
 }
 
+// Takes in 2 indices
+// Swaps their position in the underlying array
 void Queue::swap(int a, int b) {
-    Node* temp = list[a];
-    list[a] = list[b];
-    list[b] = temp;
+    Node* temp = queueArray[a];
+    queueArray[a] = queueArray[b];
+    queueArray[b] = temp;
 }
 
 void Queue::print() const {
-    for (Node* node : list)
-        std::cout << node->data << ": Prio " << node->priority << std::endl;
+    for (Node* node : queueArray)
+        printf("%c => %d\n", node->ch, node->priority);
 }
