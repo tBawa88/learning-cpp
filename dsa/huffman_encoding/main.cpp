@@ -1,6 +1,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 
@@ -16,14 +17,18 @@ void buildPrioQueue(Queue& pqueue, unordered_map<char, int>& charFreq);
 void buildHuffmanTree(Queue& pqueue);
 void encodeData(ifstream& file, unordered_map<char, string>& huffmanCodes, string& encodedString);
 void writeToEncodedFile(string& encodedString, const string& outFilename);
+void extractBits(const string& filename, vector<bool>& bits);
 
 int main() {
     Queue pqueue;
     unordered_map<char, int> charFreq{};
-    ifstream file{"input"};
+    string inputFile = "input";
+    string compFileName = "input_compressed";
+    string decompFilename = "input_copy";
+    ifstream file{inputFile};
 
     if (!file.is_open()) {
-        cerr << "Error opening the file " << endl;
+        throw runtime_error{"Failed to open text file"};
         return 1;
     }
 
@@ -37,24 +42,34 @@ int main() {
     buildHuffmanTree(pqueue);
 
     // 4. construct a binary Tree object using this node
-    BinaryTree tree{pqueue.dequeue()};
+    BinaryTree huffmanTree{pqueue.dequeue()};
 
     // 5. Walk the Huffman Binary Tree and map each character to it's binary code
     unordered_map<char, string> huffmanCodes;
-    tree.mapBinaryCode(huffmanCodes);
+    huffmanTree.mapBinaryCode(huffmanCodes);
 
     // 6. Read the original data again, and build an encodedString (a binary string)
     string encodedString;
     encodeData(file, huffmanCodes, encodedString);
 
     // 7. Final step: obtain individual bytes from the encodedString and write them to the output file
-    writeToEncodedFile(encodedString, "output");
+    writeToEncodedFile(encodedString, compFileName);
+
+    // ====== Decoding =======
+    // 1. Read the entire file and extract individual bits into a vector
+    vector<bool> bits;
+    extractBits(compFileName, bits);
+
+    // 2. Decode the entire file using this list of bits and by walking the huffmanTree to find characters
+    huffmanTree.decompressFile(decompFilename, bits);
 
     file.close();
     return 0;
 }
 
-// Takes in a ifStream object, reads each character from it and builds the frequency map
+// Counts frequency of each character in the Text file
+// file: refrence to ifStream file object
+// charFreq : reference to the an empty map<char, int>
 void countCharFreq(ifstream& file, unordered_map<char, int>& charFreq) {
     char ch;
     while (file.get(ch)) {
@@ -65,6 +80,8 @@ void countCharFreq(ifstream& file, unordered_map<char, int>& charFreq) {
     }
 }
 // Builds a priority queue. Stores each character by taking it's frequency value as priority
+// - pqueue: a reference to the priority queue object
+// - charFreq : a map containing frequencies of each character in the text file
 void buildPrioQueue(Queue& pqueue, unordered_map<char, int>& charFreq) {
     for (auto elem : charFreq) {
         pqueue.enqueue(elem.first, elem.second);
@@ -72,6 +89,7 @@ void buildPrioQueue(Queue& pqueue, unordered_map<char, int>& charFreq) {
 }
 
 // Builds a Huffman Tree from the given priorityQueue
+// dequque() first 2 nodes from the Queue, makes a newNode and enqueues() the newNode back to the queue
 void buildHuffmanTree(Queue& pqueue) {
     while (pqueue.size() > 1) {
         Node* first = pqueue.dequeue();
@@ -84,14 +102,13 @@ void buildHuffmanTree(Queue& pqueue) {
     }
 }
 
-// encodeData() reads the file single char at a time, and builds a 'binary string'
-// by looking up huffman codes for each character in the map
-// - Takes in a ifStream& object
-// - A map which contains characters and their huffman codes
-// - An empty string to which all the charcter codes will be added
+// Reads the file, single char at a time, and builds a 'binary string' by looking up huffman codes for each character in the map
+// - ifstream& file: original text file containting text data
+// - huffmanCodes : A map containing characters and their huffman codes
+// - encodedString: A string to which all the charcter codes will be appended
 void encodeData(ifstream& file, unordered_map<char, string>& huffmanCodes, string& encodedString) {
     file.clear();  // clear the EOF flag
-    file.seekg(0, std::ios::beg);  // move the cursor to beginning
+    file.seekg(0, std::ios::beg);  // move the cursor back to beginning
 
     char ch;
     while (file.get(ch)) {
@@ -100,8 +117,8 @@ void encodeData(ifstream& file, unordered_map<char, string>& huffmanCodes, strin
 }
 
 // Groups the encoded data into individual bytes (8 bits) and writes them to the output file
-// - Takes a string that contains all the encoded bit data
-// - A filename for the output file
+// - encdoedString: string that contains all the encoded bit data
+// - outFilename: filename for the output file
 void writeToEncodedFile(string& encodedString, const string& outFilename) {
     ofstream file(outFilename);
     int bitCount = 0;
@@ -120,12 +137,34 @@ void writeToEncodedFile(string& encodedString, const string& outFilename) {
             byte = 0;
         }
     }
-
-    // check for any remaining bits
+    // checking for remaining bits and making it a whole byte if necessary
     if (bitCount > 0) {
-        byte = byte << (8 - bitCount);  // this will left shif byte by adding 0s to the right side
+        byte = byte << (8 - bitCount);
         file.put(byte);
     }
-
     file.close();
+}
+
+// Extracts individual bits from the compressed binary file and puts them into a vector
+// - filename : name of compressed file
+// - bits : vector in which all the individual bits are inserted
+void extractBits(const string& filename, vector<bool>& bits) {
+    ifstream compressedFile(filename, ios::binary);
+
+    if (!compressedFile.is_open()) {
+        throw runtime_error{"Failed to open the compressed file"};
+    }
+
+    char byte;
+    while (compressedFile.get(byte)) {
+        for (int i = 7; i >= 0; i--) {
+            // First iteration brings the MSB to the LSB place and the whole byte is either (00000000) or (00000001)
+            // & 1 returns either 1 or 0 which gets stored in the boolean
+            // same thing is repeated for every other bit in the byte
+            bool bit = (byte >> i) & 1;
+            bits.push_back(bit);
+        }
+    }
+
+    compressedFile.close();
 }

@@ -1,5 +1,7 @@
+#include <fstream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "Node.h"
 
@@ -16,6 +18,7 @@ class BinaryTree {
     BinaryTree(Node* node);
     ~BinaryTree();
     void mapBinaryCode(std::unordered_map<char, std::string>& huffmanCodes);
+    void decompressFile(const std::string& decompFile, std::vector<bool>& bits) const;
     void printSideways();
 };
 
