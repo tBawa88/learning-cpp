@@ -3,6 +3,7 @@
 #include <set>
 
 #include "airline.cpp"
+#include "followers.cpp"
 #include "graph.h"
 
 using namespace std;
@@ -10,9 +11,19 @@ using namespace std;
 void DepthFirstSearch(node* v);
 void DFS_Helper(node* v, set<node*>& visited);
 void BreadthFirstSearch(node* v);
+void VisitNode(node* v);
 void ClearGraph(graph* g);
 
 int main() {
+    graph* g = CreateFollowerGraph();
+    // Find the coolest user -> user who's users have the most users
+    PrintUsersGraph(g);
+
+    ClearGraph(g);
+    return 0;
+}
+
+int main2() {
     graph* g = CreateAirlineGraph();
     // PrintAirlineGraph(g);
 
@@ -20,6 +31,7 @@ int main() {
     BreadthFirstSearch(g->nodeMap["New Delhi"]);
 
     ClearGraph(g);
+    return 0;
 }
 
 // Recursively explores a single path untill it's end
@@ -32,7 +44,7 @@ void DFS_Helper(node* v, set<node*>& visited) {
     if (visited.contains(v))
         return;
 
-    VisitCity(v);
+    VisitNode(v);
     visited.insert(v);
     for (edge* arc : v->edges) {
         DFS_Helper(arc->finish, visited);
@@ -50,13 +62,17 @@ void BreadthFirstSearch(node* v) {
         node* currNode = pending.front();
         pending.pop();
         if (!visited.contains(currNode)) {
-            VisitCity(currNode);
+            VisitNode(currNode);
             visited.insert(currNode);
             for (edge* arc : currNode->edges) {
                 pending.push(arc->finish);
             }
         }
     }
+}
+
+void VisitNode(node* v) {
+    cout << v->name << endl;
 }
 
 /** Frees up the memory and clears all the nodes and edges from the graph */
