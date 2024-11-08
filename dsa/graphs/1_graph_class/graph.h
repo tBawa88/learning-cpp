@@ -48,6 +48,7 @@ struct edgeT {
  */
 template <typename NodeType, typename EdgeType>
 class Graph {
+   public:
     /**
      * Constructor : Graph
      * Usage : Graph<NodeType, EdgeType> g;
@@ -82,7 +83,7 @@ class Graph {
      * The Second version assumes the client has already created a node and directly adds this node to the Graph.
      * Both versions of this method return the NodeType*, incase the client needs to capture this value
      */
-    Nodetype* addNode(std::string name);
+    NodeType* addNode(std::string name);
     NodeType* addNode(NodeType* node);
 
     /**
@@ -97,8 +98,8 @@ class Graph {
      * The third version assumes that the user has crated an EdgeType and directly adds it to the Graph's set of edges
      * All versions return the pointer to the EdgeType* incase the client needs to capture this value
      */
-    EdgeType* addEdge(std::string node1, std::string node2);
-    EdgeType* addEdge(NodeType* node1, NodeType* node2);
+    EdgeType* addEdge(std::string node1, std::string node2, double cost);
+    EdgeType* addEdge(NodeType* node1, NodeType* node2, double cost);
     EdgeType* addEdge(EdgeType* edge);
 
     /**
@@ -136,14 +137,18 @@ class Graph {
      * Returns the set of all the edges present in the graph,
      * If a node is passed as a parameter, it returns set of edges of that node
      */
-    std::set<EdgeType*> getEdgeSet();
-    std::set<EdgeType*> getEdgeSet(NodeType* node);
+    std::set<EdgeType*>& getEdgeSet();
+    std::set<EdgeType*>& getEdgeSet(NodeType* node);
 
    private:
-#include "graph_priv.h"
-    // Including the file here like this is equivalent of directly injecting all the contents of that file in here
+    std::set<NodeType*> nodes;
+    std::set<EdgeType*> edges;
+    std::map<std::string, NodeType*> nodeMap;
 };
 
+// Since we're implementing a templated class, we need to include the implementation inside the header file
+// OR else the linker won't be able to find the template implementation
+// C++ is just so amazing
 #include "graph_impl.cpp"
 
 #endif
