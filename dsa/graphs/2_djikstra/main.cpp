@@ -28,7 +28,7 @@ vector<edgeT*> FindShortesPath(nodeT* current, nodeT* finish) {
 
     while (current != finish) {
         if (!fixed.contains(current->name)) {
-            cout << "\nFixing city " << current->name << " Total distance till now" << TotalPathDistance(path) << endl;
+            // cout << "\nFixing city " << current->name << " Total distance till now " << TotalPathDistance(path) << endl;
             fixed[current->name] = TotalPathDistance(path);
 
             // for each edge of this currentNode, check if they've been enqueued or not
@@ -36,8 +36,8 @@ vector<edgeT*> FindShortesPath(nodeT* current, nodeT* finish) {
                 if (!fixed.contains(edge->finish->name)) {
                     vector<edgeT*> newpath = path;  // copy the path till now
                     newpath.push_back(edge);  // add this edge to the new path
-                    cout << "\nExploring path -> ";
-                    PrintPath(newpath);
+                    // cout << "\nEnqueue path ->";
+                    // PrintPath(newpath);
                     queue.enqueue(newpath, TotalPathDistance(newpath));  // enqueue this new path to the prio queue
                 }
             }
@@ -45,9 +45,9 @@ vector<edgeT*> FindShortesPath(nodeT* current, nodeT* finish) {
         // Now it's time to choose the shorted path from the queue
         // But if the queue itself is empty(meaning all the paths have been dequeue'd from it, and we're still not done looking)
         if (queue.empty()) return vector<edgeT*>{};
-        cout << "\n Current Shortes path => ";
-        PrintPath(path);
         path = queue.dequeue();  // extract the shortest path from the queue, and explore this path
+        // cout << "\n Current Shortest path => ";
+        // PrintPath(path);
         current = path[path.size() - 1]->finish;
     }
     return path;

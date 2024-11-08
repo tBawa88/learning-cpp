@@ -6,6 +6,7 @@
 #include "graph.h"
 
 using namespace std;
+void Print_PPath(vector<edgeT*>& path);
 
 struct Node {
     vector<edgeT*> path;
@@ -21,6 +22,7 @@ class PrioQueue {
     void clear();
     int getSmallerPrioIndex(int a, int b);
     void swapElements(int a, int b);
+    void printQueue();
 
    public:
     PrioQueue();
@@ -48,17 +50,6 @@ void PrioQueue::enqueue(vector<edgeT*> path, double priority) {
     queue.push_back(node);
     bubbleUp();
 }
-vector<edgeT*> PrioQueue::dequeue() {
-    if (queue.empty())
-        return vector<edgeT*>{};
-    Node* firstNode = queue[0];
-    Node* lastNode = queue[queue.size() - 1];
-    queue[0] = lastNode;
-    queue.pop_back();
-    sinkDown();
-    return firstNode->path;
-}
-
 void PrioQueue::bubbleUp() {
     int currIdx = queue.size() - 1;
     double currPrio = queue[currIdx]->priority;
@@ -73,6 +64,17 @@ void PrioQueue::bubbleUp() {
     }
 }
 
+vector<edgeT*> PrioQueue::dequeue() {
+    if (queue.empty())
+        return vector<edgeT*>{};
+    Node* firstNode = queue[0];
+    Node* lastNode = queue[queue.size() - 1];
+    queue[0] = lastNode;
+    queue.pop_back();
+    sinkDown();
+    return firstNode->path;
+}
+
 int min(int a, int b) { return a < b ? a : b; }
 int PrioQueue::getSmallerPrioIndex(int a, int b) {
     return queue[a]->priority < queue[b]->priority ? a : b;
@@ -82,16 +84,34 @@ void PrioQueue::sinkDown() {
         return;
     int currIdx = 0;
     int currPrio = queue[currIdx]->priority;
-    int leftIdx = currPrio * 2 + 1;
+    int leftIdx = currIdx * 2 + 1;
     int rightIdx = min(leftIdx + 1, queue.size() - 1);
+
     while (leftIdx < queue.size()) {
         int smallerIdx = getSmallerPrioIndex(leftIdx, rightIdx);
-        if (currPrio <= queue[smallerIdx]->priority) break;
+        if (currPrio < queue[smallerIdx]->priority) break;
 
         swapElements(currIdx, smallerIdx);
         currIdx = smallerIdx;
         leftIdx = currIdx * 2 + 1;
         rightIdx = min(leftIdx + 1, queue.size() - 1);
+    }
+}
+
+void PrioQueue::printQueue() {
+    cout << "Current Prio Queue State\n";
+    for (Node* node : queue) {
+        Print_PPath(node->path);
+        cout << "(" << node->priority << ")" << endl;
+    }
+}
+void Print_PPath(vector<edgeT*>& path) {
+    bool first = true;
+    for (edgeT* edge : path) {
+        if (first)
+            cout << edge->start->name;
+        cout << " -> " << edge->finish->name;
+        first = false;
     }
 }
 
