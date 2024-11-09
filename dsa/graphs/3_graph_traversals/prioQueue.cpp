@@ -1,7 +1,6 @@
 #ifndef _prio_queue
 #define _prio_queue
 
-#include <iostream>
 #include <vector>
 
 #include "graph.h"
@@ -100,8 +99,10 @@ void PrioQueue::sinkDown() {
 }
 
 void PrioQueue::printQueue() {
+    cout << "Current Prio Queue State\n";
     for (Node* node : queue) {
         Print_PPath(node->path);
+        cout << "(" << node->priority << ")" << endl;
     }
 }
 void Print_PPath(vector<edgeT*>& path) {

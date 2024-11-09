@@ -11,7 +11,6 @@
 #include <map>
 #include <set>
 #include <string>
-
 /**
  * NodeCompare and EdgeCompare
  * ---------------------------
@@ -43,7 +42,7 @@ struct EdgeCompare {
     }
 };
 
-/* These are default implementations for nodes and edges. Client can choose to use these, or provide their own implementation. (Must meed the basic requriements)*/
+/**These are default implementation of nodes and edges data type. Client can choose to use this, or provide their own implementaion */
 struct nodeT; /*Forward references for the compiler*/
 struct edgeT;
 
