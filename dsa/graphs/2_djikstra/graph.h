@@ -31,6 +31,37 @@ struct edgeT {
 };
 
 /**
+ * NodeCompare and EdgeCompare
+ * ---------------------------
+ * These 2 structs provide overloaded "()" operator which act as  comparator functions for the set of  nodes and edges.
+ *
+ * Since the "set" class uses a binary search tree under the hood, if we don't provide a custom comparator, it will compare the pointers
+ * based on their numerical value of memory address. Which is not the criteria we want for sorting the nodes/edges.
+ * The comparator function should be of type "bool less(lhs, rhs)" which takes 2 arguments and returns a boolean which tells if 1st arg is < 2nd arg
+ */
+
+template <typename NodeType>
+struct NodeCompare {
+    bool operator()(const NodeType* n1, const NodeType* n2) const {
+        return n1->name < n2->name;
+    }
+};
+
+template <typename NodeType, typename EdgeType>
+struct EdgeCompare {
+    bool operator()(const EdgeType* e1, const EdgeType* e2) const {
+        NodeType* n1 = e1->start;
+        NodeType* n2 = e2->start;
+        if (n1->name == n2->name) {
+            n1 = e1->finish;
+            n2 = e2->finish;
+            return n1->name < n2->name;
+        }
+        return n1->name < n2->name;
+    }
+};
+
+/**
  * Class : Graph<NodeType, EdgeType>
  * --------------------------------
  * This class represents a generic Graph class, which takes in user implemented NodeType and EdgeType parameters
@@ -141,8 +172,8 @@ class Graph {
     std::set<EdgeType*>& getEdgeSet(NodeType* node);
 
    private:
-    std::set<NodeType*> nodes;
-    std::set<EdgeType*> edges;
+    std::set<NodeType*, NodeCompare<NodeType>> nodes;
+    std::set<EdgeType*, EdgeCompare<NodeType, EdgeType>> edges;
     std::map<std::string, NodeType*> nodeMap;
 };
 

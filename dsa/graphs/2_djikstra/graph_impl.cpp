@@ -7,50 +7,16 @@
 #include <set>
 #include <string>
 
-#include "graph.h"
+// #include "graph.h"
 
 using namespace std;
 
 #ifdef _graph_class_
 
-/**
- * NodeCompare and EdgeCompare
- * ---------------------------
- * These generic functions compare nodes and edges by comparing the node names alphabetically
- */
-
-template <typename Nodetype>
-int NodeCompare(Nodetype* n1, Nodetype* n2) {
-    if (n1->name == n2->name)
-        return 0;
-    return (n1->name < n2->name) ? -1 : 1;
-}
-
-template <typename NodeType, typename EdgeType>
-int EdgeCompare(EdgeType* e1, EdgeType* e2) {
-    NodeType* n1 = e1->start;
-    NodeType* n2 = e2->start;
-    int cmp = NodeCompare(n1, n2);
-    if (cmp != 0)
-        return cmp;
-
-    // if the starting nodes of the edge are same, then compare the finish node to determin which edge is greater
-    n1 = e1->finish;
-    n2 = e2->finish;
-    return NodeCompare(n1, n2);
-}
-
-/**
- * Implementation : Constructor
- * ----------------------------
- * The constructor requries no arguments but it does initializes the nodes and edges sets with the custom comparator functions
- * (NodeCompare and EdgeCompare)
- */
 template <typename NodeType, typename EdgeType>
 Graph<NodeType, EdgeType>::Graph() {
 }
-// Graph<NodeType, EdgeType>::Graph() : nodes(NodeCompare<NodeType>), edges(EdgeCompare<NodeType, EdgeType>) {
-// }
+
 template <typename Nodetype, typename Edgetype>
 Graph<Nodetype, Edgetype>::~Graph() {
     clear();

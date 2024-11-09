@@ -12,11 +12,11 @@ vector<edgeT*> FindShortesPath(nodeT* current, nodeT* finish);
 double TotalPathDistance(vector<edgeT*>& path);
 void PrintPath(vector<edgeT*>& path);
 int main() {
-    // Creating a graph using nodeT for a NodeType and edgeT for EdgeType
     Graph<nodeT, edgeT>* g = CreateAirlineGraph<nodeT, edgeT>();
 
     vector<edgeT*> shortestPath = FindShortesPath(g->getNode("San Francisco"), g->getNode("Boston"));
     PrintPath(shortestPath);
+
     delete g;
     return 0;
 }
