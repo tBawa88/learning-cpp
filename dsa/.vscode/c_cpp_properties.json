@@ -3,7 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "\"/usr/include/StanfordCPPLib\""
+                // "\"/usr/include/StanfordCPPLib\""
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
