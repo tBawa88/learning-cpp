@@ -167,6 +167,27 @@ class Graph {
     std::set<EdgeType*, EdgeCompare<NodeType, EdgeType>>& getEdgeSet();
     std::set<EdgeType*, EdgeCompare<NodeType, EdgeType>>& getEdgeSet(NodeType* node);
 
+    /**
+     * Method : pathExists
+     * Usage : if(g.pathExists(n1, n2)). . .
+     * --------------------------------------
+     * Returns true if there is a path between two given nodes of the graph.
+     * Else returns false.
+     * Does not account for edge weight, performs a BFS
+     */
+    bool pathExists(NodeType* node1, NodeType* node2);
+
+    /**
+     * Method : hopCount
+     * Usage : hops = g.hopCount(n1,n2);
+     * -----------------------------------
+     * Returns number of hops in the shortest path between n1 and n2.
+     * Returns 0, if n1 == n2
+     * Returns -1, if no path exists between n1 and n2
+     * Does not account for edge weight, performs a BFS
+     */
+    int hopCount(NodeType* node1, NodeType* node2);
+
    private:
     std::set<NodeType*, NodeCompare<NodeType>> nodes;
     std::set<EdgeType*, EdgeCompare<NodeType, EdgeType>> edges;

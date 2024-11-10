@@ -14,12 +14,14 @@ vector<nodeT*> FindShortestPath(nodeT* current, nodeT* target);
 double TotalPathCost(vector<edgeT*>& path);
 void PrintPath(vector<edgeT*>& path);
 void PrintPath(vector<nodeT*>& path);
+vector<nodeT*> Dijkstra_2(nodeT* start, nodeT* finish);
 
 /* Main function */
 int main() {
     Graph<nodeT, edgeT>* g = CreateNewGraph<nodeT, edgeT>();
 
-    auto path = FindShortestPath(g->getNode("b"), g->getNode("d"));
+    // auto path = FindShortestPath(g->getNode("a"), g->getNode("c"));
+    auto path = Dijkstra_2(g->getNode("a"), g->getNode("h"));
     PrintPath(path);
     // PrintGraph(g);
 
@@ -28,6 +30,8 @@ int main() {
 }
 
 vector<nodeT*> FindShortestPath(nodeT* start, nodeT* target) {
+    if (start == nullptr || target == nullptr)
+        return {};
     map<nodeT*, double> costToNode;
     set<nodeT*> visited;
     PrioQueue pqueue;
@@ -96,4 +100,49 @@ void PrintPath(vector<edgeT*>& path) {
         first = false;
     }
     cout << endl;
+}
+
+// Literally just a BFS which uses a prio queue to make them most optimla choice at each node
+vector<nodeT*> Dijkstra_2(nodeT* start, nodeT* finish) {
+    if (start == nullptr || finish == nullptr)
+        return {};
+    PrioQueue pqueue;
+    set<nodeT*> visited;
+    map<nodeT*, double> costToNode;
+    bool pathFound = false;
+    costToNode[start] = 0;
+    pqueue.enqueue(start, 0);
+
+    while (!pqueue.empty()) {
+        nodeT* vert = pqueue.dequeue();
+        visited.insert(vert);
+
+        if (vert == finish) {
+            pathFound = true;
+            break;
+        }
+
+        // BFS : add all unvisited neighbors into the queue
+        for (edgeT* edge : vert->edges) {
+            nodeT* neighbor = edge->finish;
+            if (!visited.contains(neighbor)) {
+                double newCost = costToNode[vert] + edge->cost;
+                if (!costToNode.contains(neighbor) || newCost < costToNode[neighbor]) {
+                    costToNode[neighbor] = newCost;
+                    pqueue.updatePriority(neighbor, newCost);
+                    neighbor->previous = vert;
+                }
+            }
+        }
+    }
+
+    if (!pathFound) return vector<nodeT*>{};
+
+    vector<nodeT*> path;
+    while (finish != start) {
+        path.push_back(finish);
+        finish = finish->previous;
+    }
+    path.push_back(start);
+    return path;
 }

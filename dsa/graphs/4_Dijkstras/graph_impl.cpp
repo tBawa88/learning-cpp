@@ -114,4 +114,57 @@ set<EdgeType*, EdgeCompare<NodeType, EdgeType>>& Graph<NodeType, EdgeType>::getE
     return node->edges;
 }
 
+template <typename NodeType, typename EdgeType>
+bool Graph<NodeType, EdgeType>::pathExists(NodeType* start, NodeType* target) {
+    set<NodeType*> visited;
+    queue<NodeType*> q;
+    q.push(start);
+
+    while (!q.empty()) {
+        NodeType* vert = q.front();
+        q.pop();
+        if (vert == target) return true;
+
+        if (!visited.contains(vert)) {
+            visited.insert(vert);
+
+            for (EdgeType* edge : vert->edges) {
+                if (!visited.contains(edge->finish)) {
+                    q.push(edge->finish);
+                }
+            }
+        }
+    }
+    return false;
+}
+
+template <typename NodeType, typename EdgeType>
+int Graph<NodeType, EdgeType>::hopCount(NodeType* start, NodeType* target) {
+    set<NodeType*> visited;
+    queue<NodeType*> q;
+    map<NodeType*, int> hopsToNode;
+    q.push(start);
+    hopsToNode[start] = 0;
+
+    while (!q.empty()) {
+        NodeType* vert = q.front();
+        q.pop();
+
+        if (vert == target) {
+            // path found, return hopCount
+            return hopsToNode[vert];
+        }
+        visited.insert(vert);
+        for (EdgeType* edge : vert->edges) {
+            NodeType* neighbor = edge->finish;
+            if (!visited.contains(neighbor)) {
+                hopsToNode[neighbor] = hopsToNode[vert] + 1;
+                q.push(neighbor);
+                visited.insert(neighbor);  // as soon as shortest path to a neighbor is set, mark that neighbor as visited
+            }
+        }
+    }
+    return -1;
+}
+
 #endif
