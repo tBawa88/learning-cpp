@@ -1,10 +1,10 @@
 #include <iostream>
 #include <stdexcept>
 
-using namespace std;
-
 #ifndef _hash_set_
 #define _hash_set_
+
+using namespace std;
 
 template <typename SetType>
 struct HashNode {
@@ -15,9 +15,7 @@ struct HashNode {
         this->val = val;
         this->next = next;
     }
-    ~HashNode() {
-        cout << "node cleared: " << val << endl;
-    }
+    ~HashNode() {}
 };
 
 /**
@@ -60,6 +58,19 @@ class HashSet {
      * Returns true if there are no elements in the set
      */
     bool empty();
+
+    // adding the iterator nested class
+#include "HashSet_iterator.cpp"
+
+    /*begin()_ initializes the iterator object and returns it*/
+    Iterator begin() {
+        return Iterator(table, capacity, 0, table[0]);
+    }
+
+    /*end() function signifies the end of poiner position*/
+    Iterator end() {
+        return Iterator(table, capacity, capacity, nullptr);
+    }
 
    private:
     /**

@@ -31,10 +31,9 @@ void HashSet<SetType>::insert(const SetType& val) {
         if (!head) {
             table[index] = newNode;
         } else {
-            while (head->next) {
-                head = head->next;
-            }
-            head->next = newNode;
+            // needa add to the front of the linked list
+            newNode->next = table[index];
+            table[index] = newNode;
         }
         set_size++;
     }
