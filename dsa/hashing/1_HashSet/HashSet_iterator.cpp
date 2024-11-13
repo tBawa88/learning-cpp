@@ -55,16 +55,15 @@ class Iterator {
     bool operator!=(const Iterator& other) const {
         return !(*this == other);
     }
+    /*Helper to skip to next non-empty bucket*/
+    void advanceToNextBucket() {
+        while (bucketIndex < capacity && !currentNode)
+            currentNode = table[bucketIndex++];
+    }
 
    private:
     HashNode<SetType>** table;
     int capacity;
     int bucketIndex;
     HashNode<SetType>* currentNode;
-
-    /*Helper to skip to next non-empty bucket*/
-    void advanceToNextBucket() {
-        while (bucketIndex < capacity && !currentNode)
-            currentNode = table[bucketIndex++];
-    }
 };

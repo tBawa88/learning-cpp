@@ -64,7 +64,10 @@ class HashSet {
 
     /*begin()_ initializes the iterator object and returns it*/
     Iterator begin() {
-        return Iterator(table, capacity, 0, table[0]);
+        Iterator it(table, capacity, 0, table[0]);
+        // incase the node on the 0th index is nullptr
+        it.advanceToNextBucket();
+        return it;
     }
 
     /*end() function signifies the end of poiner position*/
