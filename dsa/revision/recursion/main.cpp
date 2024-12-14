@@ -4,8 +4,11 @@ using namespace std;
 
 #include "GCD.cpp"
 #include "binarySearch.cpp"
+#include "combinations.cpp"
+#include "digital_root.cpp"
 #include "finonacci.cpp"
 #include "pallindrome.cpp"
+#include "stringReverse.cpp"
 int main() {
     // int n;
     // cout << "Enter n to find nth term of fibonacci " << endl;
@@ -28,10 +31,23 @@ int main() {
     // else
     //     cout << "Key exists at index " << i << endl;
 
-    int x, y;
-    cin >> x >> y;
-    int g = gcd(x, y);
-    cout << "GCD of " << x << " and " << y << " is = " << g << endl;
+    // int x, y;
+    // cin >> x >> y;
+    // int g = gcd(x, y);
+    // cout << "GCD of " << x << " and " << y << " is = " << g << endl;
+
+    // int n;
+    // cin >> n;
+    // cout << "Digital root of " << n << "is = " << digitalRoot(n) << endl;
+
+    // int n, r;
+    // cout << "Enter n and r to find combination n Choose r\n";
+    // cin >> n >> r;
+    // cout << n << " C " << r << " = " << combinations(n, r) << endl;
+
+    string s;
+    cin >> s;
+    cout << reverseString(s);
 
     return 0;
 }
