@@ -3,11 +3,14 @@
 using namespace std;
 
 #include "GCD.cpp"
+#include "TOH.cpp"
 #include "binarySearch.cpp"
 #include "combinations.cpp"
 #include "digital_root.cpp"
 #include "finonacci.cpp"
+#include "listMnemonics.cpp"
 #include "pallindrome.cpp"
+#include "permutations.cpp"
 #include "stringReverse.cpp"
 int main() {
     // int n;
@@ -45,9 +48,18 @@ int main() {
     // cin >> n >> r;
     // cout << n << " C " << r << " = " << combinations(n, r) << endl;
 
-    string s;
-    cin >> s;
-    cout << reverseString(s);
+    // string s;
+    // cin >> s;
+    // cout << reverseString(s);
+
+    // int rods = 3;
+    // moveRods(rods, 'A', 'C', 'B');
+
+    // string s;
+    // cin >> s;
+    // ListPermutations(s);
+
+    ListMnemonics("234");
 
     return 0;
 }
